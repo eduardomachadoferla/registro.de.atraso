@@ -3,6 +3,12 @@ include('config/base.php');
 $css = ['index.css', 'estilo.css'];
 include("header.php");
 unset($_SESSION['ALUNO']);
+
+
+
+
+
+
 ?>
 
 <form action="index.php" method="get">
