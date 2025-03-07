@@ -27,9 +27,9 @@ unset($_SESSION['ALUNO']);
 
         <!-- <select id="turma" name="turma" required class="cadastroForm">
             <option value="">Selecionar turma...</option>
-            <?php foreach ($turmas as $turma) { ?>
+            <?php /*foreach ($turmas as $turma) { ?>
                 <option value="<?php echo $turma['id']; ?>"><?php echo $turma['turma']; ?></option>
-            <?php } ?>
+            <?php } */?>
         </select> -->
 
         <select id="motivo_atraso" name="motivo_atraso" required onchange="mostrarCaixaTexto()" class="cadastroForm">
@@ -93,7 +93,7 @@ function mostrarCaixaTexto() {
 
 <style>
 .sugestoes {
-    border: 1px solid #ccc;
+   
     max-height: 100px; /* Altura ajustada */
     overflow-y: auto;
     background: rgba(255, 255, 255, 0.8); /* Fundo transparente */

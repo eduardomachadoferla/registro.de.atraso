@@ -5,7 +5,7 @@ $css = ['estilo.css'];
 include("header.php");
 
 // Consultar as turmas da tabela 'sosatraso'
-$sql2 = 'SELECT DISTINCT turma FROM atrasos';
+$sql2 = 'SELECT DISTINCT turma FROM sosatraso';
 $stmt2 = $pdo->prepare($sql2);
 $stmt2->execute();
 $turmas = $stmt2->fetchAll(PDO::FETCH_OBJ); // Pega todas as turmas da tabela 'sosatraso'
@@ -33,11 +33,13 @@ if (isset($_POST['nome'])) {
 }
 
 // Inserir dados na tabela 'sosatraso'
-$sql = 'insert into atrasos (nome, turma, motivo, data) values (:nome, :turma, :motivo, :data)';
+$name = utf8_decode($_SESSION['ALUNO']['NOME']);
+$description = utf8_decode($_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT']);
+$sql = 'insert into sosatraso (nome, turma, motivo, data) values (:nome, :turma, :motivo, :data)';
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(':nome', $_SESSION['ALUNO']['NOME']);
+$stmt->bindParam(':nome', $name);
 $stmt->bindParam(':turma', $_SESSION['ALUNO']['TURMA']); // Nome da turma
-$stmt->bindParam(':motivo', $_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT']);
+$stmt->bindParam(':motivo', $description);
 $stmt->bindParam(':data', $_SESSION['ALUNO']['HORA']);
 $stmt->execute();
 ?>

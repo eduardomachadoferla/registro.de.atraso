@@ -10,41 +10,29 @@
         $stmt2->execute();
         $turmas = $stmt2->fetchAll();
 
-        if (isset($_POST['turma'])) {
+        $sqlRelatorio = "SELECT * FROM sosatraso WHERE ";
 
-            if (!empty($_POST['data2'])) {
-                $sql1 = 'Select A.turma, count(*) as total, T.turma as turma2 from sosatraso as A inner join turmas as T on (T.id = A.turma) where A.turma in (' . implode(',', $_POST['turma']) . ') and data BETWEEN concat(:data1, " 00:00:00") and concat(:data2, " 23:59:59") group by A.turma';
-                $stmt1 = $pdo->prepare($sql1);
-                $stmt1->bindParam(':data1', $_POST['data1']);
-                $stmt1->bindParam(':data2', $_POST['data2']);
-
-                $sql = 'Select sosatraso.*, T.turma as turma2 from sosatraso inner join turmas as T on (T.id = sosatraso.turma) where sosatraso.turma in (' . implode(',', $_POST['turma']) . ') and sosatraso.data BETWEEN concat(:data1, " 00:00:00") and concat(:data2, " 23:59:59")';
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':data1', $_POST['data1']);
-                $stmt->bindParam(':data2', $_POST['data2']);
-                
-                //var_dump($dados . 'as');
-                //exit;
-            } else {
-                $sql1 = 'Select A.turma, count(*) as total, T.turma as turma2 from sosatraso as A inner join turmas as T on (T.id = A.turma) where A.turma in (' . implode(',', $_POST['turma']) . ') and data BETWEEN concat(:data1, " 00:00:00") and concat(:data1, " 23:59:59") group by A.turma';
-                $stmt1 = $pdo->prepare($sql1);
-                $stmt1->bindParam(':data1', $_POST['data1']);
-
-                $sql = 'Select sosatraso.*, T.turma as turma2 from sosatraso inner join turmas as T on (T.id = sosatraso.turma) where sosatraso.turma in (' . implode(',', $_POST['turma']) . ') and sosatraso.data  BETWEEN concat(:data1, " 00:00:00") and concat(:data1, " 23:59:59")';
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':data1', $_POST['data1']);
+        if(isset($_POST['data1'])){
+            if($_POST['data1'] && $_POST['data2']){
+                $sqlRelatorio .= "data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data2']. " 23:59:59'";
+            }else{
+                $sqlRelatorio .= "data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data1']. " 23:59:59'";
             }
-            $stmt->execute();
-            $dados = $stmt->fetchAll();
-            $_SESSION['pdf'] = $dados;
-
-
-            $stmt1->execute();
-            $totalAtrasos = $stmt1->fetchAll();
-            
-            $_SESSION['pdf2'] = $totalAtrasos;
         }
 
+        if(isset($_POST['turma']) && (isset($_POST['data1']) || isset($_POST['data1']))){
+            $sqlRelatorio .= " and turma in ('". implode("','", $_POST['turma'])."')";
+        }elseif(isset($_POST['turma'])){
+            $sqlRelatorio .= "turma in ('". implode("','", $_POST['turma'])."')";
+        }else{
+            // $sqlRelatorio .= " 1 = 1";
+        }
+        
+        var_dump($sqlRelatorio);
+        $stmtRelatorio = $pdo->prepare($sqlRelatorio);
+        $stmtRelatorio->execute();
+        $dataRelatorio = $stmtRelatorio->fetchAll();
+        
         $css = ['index.css', 'estilo.css'];
         include("header.php");
         unset($_SESSION['ALUNO']);
@@ -132,10 +120,10 @@
                 </thead>
                 <tbody>
                     <?php
-                    if (isset($totalAtrasos)) {
-                        foreach ($totalAtrasos as $total) { ?>
+                    if (isset($dataRelatorio)) {
+                        foreach ($dataRelatorio as $total) { ?>
                             <tr>
-                                <td><?php echo $total['turma2']; ?></td>
+                                <td><?php echo $total['turma']; ?></td>
                                 <td><?php echo $total['total']; ?></td>
                             </tr>
                         <?php }
@@ -156,13 +144,13 @@
                     </tr>
                 </thead>
                 <?php
-                if (!empty($dados)) {
+                if (!empty($dataRelatorio)) {
                 ?>
                     <tbody>
-                        <?php foreach ($dados as $dado) { ?>
+                        <?php foreach ($dataRelatorio as $dado) { ?>
                             <tr>
                                 <td><?php echo $dado['nome']; ?></td>
-                                <td><?php echo $dado['turma2']; ?></td>
+                                <td><?php echo $dado['turma']; ?></td>
                                 <td><?php echo $dado['motivo']; ?></td>
                                 <td><?php
                                     $data = explode(' ', $dado['data']);
