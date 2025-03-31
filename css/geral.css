@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+
+body {
+    background-color: #063664;
+    margin: 0;
+        background-image: url(../imagens/grafismo_pag_login.svg);
+        background-position: center;
+        background-position-y: -20%;
+        background-repeat: no-repeat;
+
+        /* width: 648px; */
+        /* height: 612px; */
+        /* position: absolute; */
+        /* left: calc(50% - 390px); */
+        /* max-width: 100%; */
+}
+
+.botao {
+    width: 300px;
+    height: 45px;
+    border: 0;
+    padding: 11px 21px;
+    vertical-align: middle;
+    background: #D9D9D9;
+    color: black;
+    border-radius: 6px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    text-align: center;
+}
+
+.texto {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.btn {
+    width: 300px;
+    height: 45px;
+    border: 0;
+    padding: 11px 21px;
+    vertical-align: middle;
+    background: #48ABE1;
+    color: black;
+    border-radius: 16px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.relogio-container {
+    display: flex;
+    justify-content: center;
+
+}
+
+.item {
+    margin: 6px;
+}
+
+.pvd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    border: 100%;
+    height: 70px;
+    width: 70px;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 300px;
+    font-size: 16px;
+    margin-left: 1em;
+}
+
+.pvd img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.pvd:hover {
+    background-color: #f2f2f2;
+}
+
+.txt {
+    font-family: 'Dancing Script';
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.textos{
+    width: 65%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.pesquisa{
+    position: relative;
+}
+.sugestoes {
+    max-height: 100px; /* Altura ajustada */
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 1); /* Fundo transparente */
+    position: absolute;
+    width: 100%; /* Largura menor para não ocupar toda a tela */
+    z-index: 1000; /* Garante que as sugestões fiquem acima de outros elementos */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 16px; /* Menor tamanho da fonte */
+    border: 1px solid #eeeeee;
+}
+
+.sugestoes div {
+    padding: 5px 10px; /* Menor padding */
+    cursor: pointer;
+    border-bottom: 1px solid #dddddd;
+}
+.sugestoes div:last-child {
+    border-bottom: 0;
+}
+
+
+.sugestoes div:hover {
+    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
+}

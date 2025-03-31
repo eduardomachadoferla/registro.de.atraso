@@ -2,7 +2,8 @@
 include('config/base.php');
 include('config/conexao.php');
 $css = ['estilo.css'];
-include("header.php");
+include("includes/header.php");
+
 
 // Consultar as turmas da tabela 'sosatraso'
 $sql2 = 'SELECT DISTINCT turma FROM sosatraso';

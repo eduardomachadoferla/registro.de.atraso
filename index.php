@@ -1,15 +1,16 @@
 <?php 
+
 include('config/base.php');
-$css = ['index.css', 'estilo.css'];
 include('config/conexao.php');
+include('includes/header.php');
 
 $sql2 = 'SELECT * FROM alunos';
 $stmt2 = $pdo->prepare($sql2);
 $stmt2->execute();
 $turmas = $stmt2->fetchAll();
 
-$css = ['index.css', 'estilo.css'];
-include("header.php"); 
+$css = ['geral.css', 'index.css', 'estilo.css'];
+
 unset($_SESSION['ALUNO']);
 ?>
 
@@ -19,20 +20,18 @@ unset($_SESSION['ALUNO']);
     </button>
 </form>
 
-<center>
-    <form action="autorizacao.php" method="post" id="cadastroForm">
+
+    <div class="bg-white w-[50%] mx-auto rounded-lg drop-shadow-lg px-10 py-10 h-[350px]">
+
+    <form action="autorizacao.php" method="post" id="cadastroForm" class="flex flex-col justify-center items-center center mt-10">
         <!-- Campo de pesquisa de aluno -->
-        <input type="text" id="nome" name="nome" placeholder="Nome Completo" required class="cadastroForm" onkeyup="buscarNomes()">
+        <div class="w-md pesquisa">
+        <input class="border w-md border-gray-400 rounded-md p-3 mb-5" type="text" id="nome" name="nome" placeholder="Nome Completo" required class="cadastroForm" onkeyup="buscarNomes()">
         <div id="sugestoes" class="sugestoes"></div>
+        </div>
+        
 
-        <!-- <select id="turma" name="turma" required class="cadastroForm">
-            <option value="">Selecionar turma...</option>
-            <?php /*foreach ($turmas as $turma) { ?>
-                <option value="<?php echo $turma['id']; ?>"><?php echo $turma['turma']; ?></option>
-            <?php } */?>
-        </select> -->
-
-        <select id="motivo_atraso" name="motivo_atraso" required onchange="mostrarCaixaTexto()" class="cadastroForm">
+        <select  class="border w-md border-gray-400 rounded-md p-3 mb-5" id="motivo_atraso" name="motivo_atraso" required onchange="mostrarCaixaTexto()" class="cadastroForm">
             <option value="">Motivo do Atraso</option>
             <option value="Perdi o horário">Perdi o horário</option>
             <option value="Chuva">Chuva</option>
@@ -43,10 +42,12 @@ unset($_SESSION['ALUNO']);
         <div id="outro_motivo" class="cadastroForm">
             <input type="text" id="outro_text" name="outro_text" placeholder="Especifique o Motivo">
         </div>
-
-        <button style="border-radius:40px; text-align:center;" type="submit">GERAR BILHETE</button>
+        <div class="text-center">
+        <button class="bg-marista text-white px-6 py-2 rounded-lg drop-shadow-lg mt-6"  type="submit">GERAR BILHETE</button>
+        </div>
+      
     </form>
-</center>
+</div>
 
 <script>
 function buscarNomes() {
@@ -92,30 +93,6 @@ function mostrarCaixaTexto() {
 </script>
 
 <style>
-.sugestoes {
-   
-    max-height: 100px; /* Altura ajustada */
-    overflow-y: auto;
-    background: rgba(255, 255, 255, 0.8); /* Fundo transparente */
-    position: absolute;
-    left: 50%; /* Posiciona o início das sugestões no centro */
-    transform: translateX(-50%); /* Centraliza as sugestões */
-    width: 50%; /* Largura menor para não ocupar toda a tela */
-    z-index: 1000; /* Garante que as sugestões fiquem acima de outros elementos */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    border-radius: 5px; /* Bordas arredondadas */
-    margin-top: 5px; /* Distância entre o campo de pesquisa e as sugestões */
-    font-size: 12px; /* Menor tamanho da fonte */
-}
-
-.sugestoes div {
-    padding: 5px; /* Menor padding */
-    cursor: pointer;
-}
-
-.sugestoes div:hover {
-    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
-}
 
 
 

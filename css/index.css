@@ -8,6 +8,11 @@ body {
     margin: 0 auto;
     margin-top: 10px;
 
+
+}
+.logo{
+    
+    
 }
 .container {
     background: white;
@@ -34,3 +39,5 @@ button {
 button:hover {
     background-color: #48ABE1;
 }
+
+
