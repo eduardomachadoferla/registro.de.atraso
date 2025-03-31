@@ -25,10 +25,9 @@
         }elseif(isset($_POST['turma'])){
             $sqlRelatorio .= "turma in ('". implode("','", $_POST['turma'])."')";
         }else{
-            // $sqlRelatorio .= " 1 = 1";
+         $sqlRelatorio .= " 1 = 1";
         }
         
-        var_dump($sqlRelatorio);
         $stmtRelatorio = $pdo->prepare($sqlRelatorio);
         $stmtRelatorio->execute();
         $dataRelatorio = $stmtRelatorio->fetchAll();
@@ -111,29 +110,7 @@
 
             <br><br>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Turma</th>
-                        <th>Total de atrasos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (isset($dataRelatorio)) {
-                        foreach ($dataRelatorio as $total) { ?>
-                            <tr>
-                                <td><?php echo $total['turma']; ?></td>
-                                <td><?php echo $total['total']; ?></td>
-                            </tr>
-                        <?php }
-                    } else { ?>
-                        <tr>
-                            <td colspan="2">Sem registro na data selecionada!</td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+            
             <table class="table">
                 <thead>
                     <tr>

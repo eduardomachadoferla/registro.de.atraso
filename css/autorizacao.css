@@ -1,0 +1,36 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.print{
+    display:  flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-weight: 100;
+    text-transform: initial;
+}
+.relogio-container{
+    margin-top: 10px;
+}
+.texto{
+    margin-bottom: 5px;
+}
+@media print {
+    /* 
+    .naoimprimir{
+        display: block;
+        visibility: hidden;
+    }
+     .print{
+        margin-top: -70% !important;
+        padding-top: -70% !important; 
+    }  */
+}

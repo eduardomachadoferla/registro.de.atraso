@@ -16,7 +16,7 @@
   </head>
 <body>
   <div class="cont img">
-    <img src="imagens/logo-escolas-sociais.png"  width="250" style="margin-top:20px; position: relative; left: 20px;" class="img">
+    <img src="<?php echo BASE_URL; ?>imagens/logo-escolas-sociais.png"  width="250" style="margin-top:20px; position: relative; left: 20px;" class="img">
     <div class="textos txt" >
       <span style="color:black;">SOS</span> 
       <span style="color:white;">ATRASO</span> 

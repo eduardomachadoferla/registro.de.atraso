@@ -39,5 +39,28 @@ button {
 button:hover {
     background-color: #48ABE1;
 }
+.sugestoes {
+   
+    max-height: 100px; /* Altura ajustada */
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.8); /* Fundo transparente */
+    position: relative;
+    left: 50%; /* Posiciona o início das sugestões no centro */
+    transform: translateX(-50%); /* Centraliza as sugestões */
+    width: 50%; /* Largura menor para não ocupar toda a tela */
+    z-index: 1000; /* Garante que as sugestões fiquem acima de outros elementos */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    border-radius: 5px; /* Bordas arredondadas */
+    margin-top: 5px; /* Distância entre o campo de pesquisa e as sugestões */
+    font-size: 12px; /* Menor tamanho da fonte */
+}
 
+.sugestoes div {
+    padding: 5px; /* Menor padding */
+    cursor: pointer;
+}
+
+.sugestoes div:hover {
+    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
+}
 

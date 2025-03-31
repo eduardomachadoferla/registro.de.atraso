@@ -14,19 +14,13 @@ $css = ['geral.css', 'index.css', 'estilo.css'];
 unset($_SESSION['ALUNO']);
 ?>
 
-<form action="login.php" method="get">    
-    <button type="submit" class="pvd">
-        <img src="imagens/Lock.png" height="55" width="55" action="login.php">
-    </button>
-</form>
-
-
     <div class="bg-white w-[50%] mx-auto rounded-lg drop-shadow-lg px-10 py-10 h-[350px]">
 
     <form action="autorizacao.php" method="post" id="cadastroForm" class="flex flex-col justify-center items-center center mt-10">
         <!-- Campo de pesquisa de aluno -->
         <div class="w-md pesquisa">
         <input class="border w-md border-gray-400 rounded-md p-3 mb-5" type="text" id="nome" name="nome" placeholder="Nome Completo" required class="cadastroForm" onkeyup="buscarNomes()">
+        <input type="hidden" id="turma" name="turma">
         <div id="sugestoes" class="sugestoes"></div>
         </div>
         
@@ -68,7 +62,9 @@ function buscarNomes() {
 }
 
 function selecionarNome(nome) {
-    document.getElementById("nome").value = nome;
+    var words = nome.split("|");
+    document.getElementById("nome").value = words[0];
+    document.getElementById("turma").value = words[1];
     document.getElementById("sugestoes").innerHTML = "";
 }
 
@@ -91,36 +87,5 @@ function mostrarCaixaTexto() {
     }
 }
 </script>
-
-<style>
-
-
-
-</style>
-<script>
-    function buscarNomes() {
-    var nome = document.getElementById("nome").value;
-    if (nome.length < 2) {
-        document.getElementById("sugestoes").innerHTML = "";
-        return;
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "buscar_alunos.php?nome=" + nome, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            document.getElementById("sugestoes").innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send();
-}
-
-function selecionarNome(nome) {
-    document.getElementById("nome").value = nome;
-    document.getElementById("sugestoes").innerHTML = "";
-}
-
-</script>
-
 </body>
 </html>

@@ -1,144 +1,74 @@
 <?php
-include('config/base.php');
 include('config/conexao.php');
-$css = ['estilo.css'];
-include("includes/header.php");
 
-
-// Consultar as turmas da tabela 'sosatraso'
-$sql2 = 'SELECT DISTINCT turma FROM sosatraso';
+$sql2 = 'Select * from turmas where id = :id';
 $stmt2 = $pdo->prepare($sql2);
+$stmt2->bindParam(':id', $_POST['turma']);
 $stmt2->execute();
-$turmas = $stmt2->fetchAll(PDO::FETCH_OBJ); // Pega todas as turmas da tabela 'sosatraso'
+$turma = $stmt2->fetchObject();
 
-// Se a turma não foi definida, pegar a turma do formulário enviado
 if (isset($_POST['nome'])) {
     $_SESSION['ALUNO']['NOME'] = $_POST['nome'];
-
-    // Buscar a turma do aluno na tabela 'alunos'
-    $sqlAluno = 'SELECT turma FROM alunos WHERE nome = :nome LIMIT 1';
-    $stmtAluno = $pdo->prepare($sqlAluno);
-    $stmtAluno->bindParam(':nome', $_SESSION['ALUNO']['NOME']);
-    $stmtAluno->execute();
-    $aluno = $stmtAluno->fetch(PDO::FETCH_ASSOC);
-
-    // Se encontrar o aluno, define a turma correta
-    if ($aluno) {
-        $_SESSION['ALUNO']['TURMA'] = $aluno['turma'];
-    } else {
-        $_SESSION['ALUNO']['TURMA'] = 'Turma não encontrada'; // Caso o nome não esteja cadastrado
-    }
-
-    $_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT'] = $_POST['motivo_atraso'] . (!empty($_POST['outro_text']) ? ': ' . $_POST['outro_text'] : '');
+    $_SESSION['ALUNO']['TURMA'] = $turma->turma;
+    $_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT'] = $_POST['motivo_atraso'] . (!empty($_POST['outro_text']) ?  ': ' . $_POST['outro_text'] : '');
     $_SESSION['ALUNO']['HORA'] = date('Y-m-d H:i:s');
 }
 
-// Inserir dados na tabela 'sosatraso'
-$name = utf8_decode($_SESSION['ALUNO']['NOME']);
-$description = utf8_decode($_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT']);
 $sql = 'insert into sosatraso (nome, turma, motivo, data) values (:nome, :turma, :motivo, :data)';
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(':nome', $name);
-$stmt->bindParam(':turma', $_SESSION['ALUNO']['TURMA']); // Nome da turma
-$stmt->bindParam(':motivo', $description);
+$stmt->bindParam(':nome', $_SESSION['ALUNO']['NOME']);
+$stmt->bindParam(':turma', $turma->id);
+$stmt->bindParam(':motivo', $_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT']);
 $stmt->bindParam(':data', $_SESSION['ALUNO']['HORA']);
 $stmt->execute();
 ?>
-
-<br>
-<div>
-
-
-<div class="print">
-    <div class="texto">
-        <h3>
-            <center>AUTORIZAÇÃO DE ENTRADA</center>
-        </h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/autorizacao.css">
+</head>
+<body>
+    <div class="print">
+        <div class="texto">
+            <h3>AUTORIZAÇÃO DE ENTRADA</h3>
+        </div>
+        <div class="texto">
+            <b>NOME:</b> &nbsp;<?php echo  $_SESSION['ALUNO']['NOME']; ?>&nbsp;
+        </div>
+        <div class="texto">
+            <b>TURMA:</b> &nbsp;<?php echo $_SESSION['ALUNO']['TURMA']; ?>&nbsp
+        </div>
+        <div class="texto">
+            <b>MOTIVO DO ATRASO:</b> &nbsp;<?php echo $_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT']; ?>&nbsp;
+        </div>
     </div>
-    <div class="texto">
-        <p>
-            <center>NOME: <span class="under">&nbsp;<?php echo  $_SESSION['ALUNO']['NOME']; ?>&nbsp;</span> 
-            TURMA: <span class="under">&nbsp;<?php echo $_SESSION['ALUNO']['TURMA']; ?>&nbsp;</span></center>
-        </p>
-    </div>
-    <div class="texto">
-        <p>
-            <center>MOTIVO DO ATRASO: <span class="under">&nbsp;<?php echo $_SESSION['ALUNO']['MOTIVO_ATRASO']['OUTRO_TEXT']; ?>&nbsp;</span></center>
-        </p>
-    </div>
-</div>
-
-<!-- O restante do código de relógio, etc., continua o mesmo -->
-<center>
-    <script>
-        function atualizarRelogio() {
-            const agora = new Date();
-            const horas = String(agora.getHours()).padStart(2, '0');
-            const minutos = String(agora.getMinutes()).padStart(2, '0');
-            const segundos = String(agora.getSeconds()).padStart(2, '0');
-            const horarioFormatado = `${horas}:${minutos}:${segundos}`;
-            document.getElementById('relogio').textContent = horarioFormatado;
-        }
-
-        function atualizarData() {
-            const agora = new Date();
-            const dia = String(agora.getDate()).padStart(2, '0');
-            const mes = String(agora.getMonth() + 1).padStart(2, '0');
-            const ano = agora.getFullYear();
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-            document.getElementById('data').textContent = dataFormatada;
-        }
-
-        setInterval(atualizarRelogio, 1000);
-        window.onload = function() {
-            atualizarRelogio();
-            atualizarData();
-        };
-    </script>
-</center>
-<center>
-    </head>
-
-    <body>
         <div class="relogio-container">
             <!-- Ícone e Data -->
             <div class="item">
-                <img class="icone" src="imagens/Group 6.png" height="20" width="20">
-                <span class="texto" id="data">00/00/0000</span>
-            </div>
+                <?php 
+                $date = strtotime($_SESSION['ALUNO']['HORA']);
+                $duracao = '00:04:00';
+                list($h, $m, $s) = explode(':', $duracao);
+                ?>
+                <img class="icone" src="imagens/Group 6.png" height="20" width="20">&nbsp;
+                <span class="texto" id="data"><?php echo date('d/m/Y',$date); ?></span>&nbsp&nbsp
 
-            <!-- Ícone e Hora -->
-            <div class="item">
-                <img class="icone" src="imagens/­ƒªå icon _clock_.png" height="20" width="20">
-                <span class="texto" id="relogio">00:00:00</span>
+                <img class="icone" src="imagens/icon _clock_.png" height="20" width="20">&nbsp;
+                <span class="texto" id="relogio"><?php echo date("H:i:s", $date); ?></span>
+                &nbsp;&nbsp;
+                <img class="icone" src="imagens/icon _clock_.png" height="20" width="20">&nbsp;
+                <span class="texto" id="relogio"><?php echo date('H:i:s', $date + $s + ($m * 60) + ($h * 3600)); ?></span>
             </div>
         </div>
-</center>
-</head>
-
-<body>
-    <div class="relogio-container">
-        <span class="icone" src=""></span>
-        <div class="texto" id="data"></div>
-        <br>
-        <span class="icone" src=""></span>
-        <div class="texto" id="relogio"></div>
     </div>
-    </center>
-    <br>
-
-    <center>
-        <form id="cadastroForm">
-
-            <button type="button" id="btnimprimir" style="padding: 10px 20px; background-color: #48ABE1; color: black; border: none; border-radius: 40px; cursor: pointer;">IMPRIMIR BILHETE</button>
-        </form>
-    </center>
-
-    <br>
 
     <script>
-        document.getElementById("btnimprimir").addEventListener("click", function(event) {
-            event.preventDefault();
+        // document.getElementById("btnimprimir").addEventListener("click", function(event) {
+            // event.preventDefault();
+        document.addEventListener("DOMContentLoaded", () => {
 
             window.onafterprint = function() {
                 window.location.href = "index.php";
@@ -147,7 +77,5 @@ $stmt->execute();
             window.print();
         });
     </script>
-</div>
-
-
 </body>
+</html>
