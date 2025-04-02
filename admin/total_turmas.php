@@ -29,10 +29,10 @@
 <div class="bg-white w-6xl mx-auto p-6 rounded-lg">
     <p class="text-2xl mx-auto text-center font-black text-marista">CONSULTAR RELATÓRIO</p>
     <div class="formulario">
-        <form action="relatorio.php" method="post" id="cadastroForm" class="cadastroForm">
+        <!-- <form action="relatorio.php" method="post" id="cadastroForm" class="cadastroForm">
             <input type="date" name="data1" id="data1" class="border w-sd border-gray-400 rounded-md p-1" value="<?php echo isset($_POST['data1']) ? $_POST['data1'] : null; ?>"> até
             <input type="date" name="data2" id="data2" class="border w-sd border-gray-400 rounded-md p-1" value="<?php echo isset($_POST['data2']) ? $_POST['data2'] : null; ?>">
-        </form>
+        </form> -->
         <a href="gerarpdf.php" target="_blank">
             <button class="bg-marista text-white px-6 py-2 rounded-lg drop-shadow-lg mt-6" >GERAR PDF</button>
         </a>

@@ -14,7 +14,8 @@ $css = ['geral.css', 'index.css', 'estilo.css'];
 unset($_SESSION['ALUNO']);
 ?>
 
-    <div class="bg-white w-[50%] mx-auto rounded-lg drop-shadow-lg px-10 py-10 h-[350px]">
+    <div class="bg-white w-[40%] mx-auto rounded-lg drop-shadow-lg mt-22 px-10 py-10 h-[350px]">
+   
 
     <form action="autorizacao.php" method="post" id="cadastroForm" class="flex flex-col justify-center items-center center mt-10">
         <!-- Campo de pesquisa de aluno -->
