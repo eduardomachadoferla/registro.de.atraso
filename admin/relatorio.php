@@ -1,12 +1,13 @@
-<?php
+   <?php
         include('../config/conexao.php');
 
         if (!isset($_SESSION['login']['auth'])) {
             header("Location: " . BASE_URL . 'login.php');
         }
 
+        
         $limit = 20;
-        $atual = isset($_GET['pagination']) ? $limit * $_GET['pagination'] : 0;
+        $atual = isset($_GET['pagination']) ? $limit * (int)$_GET['pagination'] : 0;
         $sql2 = 'Select * from turmas';
         $stmt2 = $pdo->prepare($sql2);
         $stmt2->execute();
@@ -24,13 +25,16 @@
 
         if(isset($_POST['turma']) && (isset($_POST['data1']) || isset($_POST['data1']))){
             $sqlRelatorio_sql .= " and turma in ('". implode("','", $_POST['turma'])."')";
-        }elseif(isset($_POST['turma'])){
-            $sqlRelatorio_sql .= "turma in ('". implode("','", $_POST['turma'])."')";
+        }elseif(isset($_POST['turma']) || isset($_GET['turma'])){
+            $turma = isset($_POST['turma']) ? $_POST['turma'] : $_GET['turma'];
+            $sqlRelatorio_sql .= "turma = '". $turma."'";
         }else{
          $sqlRelatorio_sql .= " 1 = 1";
         }
 
         $sqlRelatorio =  $sqlRelatorio_sql . " LIMIT $atual, $limit";
+
+        // var_dump($sqlRelatorio);
         
         $stmtRelatorio = $pdo->prepare($sqlRelatorio);
         $stmtRelatorio->execute();
@@ -38,7 +42,7 @@
 
         $totalRelatorio = $pdo->prepare($sqlRelatorio_sql);
         $totalRelatorio->execute();
-        $totalPaginas = ceil($totalRelatorio->rowCount() / $limit);
+        $totalPaginas = round($totalRelatorio->rowCount() / $limit);
         
         $css = ['index.css', 'estilo.css'];
         include("include/header.php");
@@ -59,7 +63,12 @@
                         <?php
                         foreach ($turmas as $turma) {
                         ?>
-                        <option value="<?php echo $turma['turma']; ?>"><?php echo $turma['turma']; ?></option>
+                        <option value="<?php echo $turma['id']; ?>" 
+                        <?php 
+                        if(isset($_GET['turma']) || isset($_POST['turma'])){
+                            $tur = isset($_POST['turma']) ? $_POST['turma'] : $_GET['turma'];
+                            echo ($tur == $turma['id']) ? 'selected' : '';
+                        }?>><?php echo $turma['turma']; ?></option>
                         <?php
                         }
                         ?>
@@ -121,7 +130,7 @@
         </a>
         <?php for($i = 1; $i <= $totalPaginas; $i++){ ?>
         <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
-        <a href="#" aria-current="page" class=" bg-marista2 relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"><?php echo $i; ?></a>
+        <a href="<?php echo BASE_ADMIN . 'relatorio.php?pagination=' . $i; ?>" aria-current="page" class="<?php echo (isset($_GET["pagination"]) && $_GET["pagination"] == $i) ? 'bg-marista' : ((!isset($_GET["pagination"]) && $i == 1) ? 'bg-marista' : 'bg-marista2') ; ?> relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"><?php echo $i; ?></a>
         <?php } ?>
         <a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
           <span class="sr-only">Next</span>
