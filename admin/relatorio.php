@@ -15,30 +15,42 @@
 
         $sqlRelatorio_sql = "SELECT * FROM sosatraso WHERE ";
 
-        if(isset($_POST['data1'])){
-            if($_POST['data1'] && $_POST['data2']){
-                $sqlRelatorio_sql .= "data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data2']. " 23:59:59'";
-            }else{
-                $sqlRelatorio_sql .= "data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data1']. " 23:59:59'";
-            }
-        }
-
-        if(isset($_POST['turma']) && (isset($_POST['data1']) || isset($_POST['data1']))){
-            $sqlRelatorio_sql .= " and turma in ('". implode("','", $_POST['turma'])."')";
-        }elseif(isset($_POST['turma']) || isset($_GET['turma'])){
+        if( isset($_POST['turma']) && !empty($_POST['turma']) || isset($_GET['turma']) && !empty($_GET['turma']) ){
             $turma = isset($_POST['turma']) ? $_POST['turma'] : $_GET['turma'];
             $sqlRelatorio_sql .= "turma = '". $turma."'";
-        }else{
-         $sqlRelatorio_sql .= " 1 = 1";
+            
+            if(isset($_POST['data1']) && !empty($_POST['data1'])){
+                if($_POST['data1'] && $_POST['data2']){
+                    $sqlRelatorio_sql .= " and data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data2']. " 23:59:59'";
+                }else{
+                    $sqlRelatorio_sql .= " and data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data1']. " 23:59:59'";
+                }
+            }
+        } else if (isset($_POST['data1']) && !empty($_POST['data1']) || isset($_POST['data2']) && !empty($_POST['data2'])) {
+            if(isset($_POST['data1'])){
+                if($_POST['data1'] && $_POST['data2']){
+                    $sqlRelatorio_sql .= "data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data2']. " 23:59:59'";
+                }else{
+                    $sqlRelatorio_sql .= "data BETWEEN '". $_POST['data1']. " 00:00:00' AND '". $_POST['data1']. " 23:59:59'";
+                }
+            }
+         
+        } else {
+            $sqlRelatorio_sql .= " 1 = 1";
         }
 
         $sqlRelatorio =  $sqlRelatorio_sql . " LIMIT $atual, $limit";
+        $sqlPdf =  $sqlRelatorio_sql;
 
-        // var_dump($sqlRelatorio);
-        
+        // var_dump($_POST, $sqlRelatorio);
         $stmtRelatorio = $pdo->prepare($sqlRelatorio);
         $stmtRelatorio->execute();
         $dataRelatorio = $stmtRelatorio->fetchAll();
+        // Criar os dados para passar para o PDF
+        $stmtPdf = $pdo->prepare($sqlPdf);
+        $stmtPdf->execute();
+        $_SESSION['pdf_title'] = "Relatório de atrasos";
+        $_SESSION['pdf'] = $stmtPdf->fetchAll();
 
         $totalRelatorio = $pdo->prepare($sqlRelatorio_sql);
         $totalRelatorio->execute();
@@ -58,8 +70,8 @@
                     <input class="border w-ms border-gray-400 rounded-md p-3" type="date" name="data2" id="data2" value="<?php echo isset($_POST['data2']) ? $_POST['data2'] : null; ?>">
                 </div>
                 <div class="data">
-                    <select class="border w-md border-gray-400 rounded-md p-3">
-                        <option>Selecionar turma...</option>
+                    <select class="border w-md border-gray-400 rounded-md p-3" name="turma" id="turma">
+                        <option value="">Selecionar turma...</option>
                         <?php
                         foreach ($turmas as $turma) {
                         ?>
@@ -159,7 +171,7 @@
         </script>
 
 <br>
-    <center><a href="gerarpdf.php" target="_blank">
+    <center><a href="relatorio_pdf.php" target="_blank">
         <button class="bg-marista2 text-white px-6 py-2 rounded-lg drop-shadow-lg mt-6" >GERAR PDF</button></center>
     </a>
 
