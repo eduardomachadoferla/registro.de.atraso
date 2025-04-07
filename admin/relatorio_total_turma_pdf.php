@@ -9,9 +9,13 @@ $datas = $_SESSION['pdf'];
 
 $pdf = new Fpdf();
 $pdf->AddPage();
-$pdf->SetFont('Arial', 'B', 9);
+
+$pdf->SetFont('Arial', 'B', 15);
+$pdf->Text(10, 10, $pdf_title, 1);
+$pdf->Cell(1, 10, '', 0, 1);  
 
 // Cabeçalho
+$pdf->SetFont('Arial', 'B', 9);
 $pdf->Cell(60, 10, 'Turma', 1);
 $pdf->Cell(40, 10, 'Total', 1);
 $pdf->Ln();

@@ -37,7 +37,7 @@ if (!empty($busca_nome)) {
 }
 
 // Consulta principal com limite e offset
-$sqlRelatorio_sql = "SELECT * FROM sosatraso $filtro_nome ORDER BY data DESC LIMIT $offset, $limit";
+$sqlRelatorio_sql = "SELECT * FROM alunos $filtro_nome ORDER BY nome ASC LIMIT $offset, $limit";
 $stmtRelatorio = $pdo->prepare($sqlRelatorio_sql);
 $stmtRelatorio->execute($params);
 $dataRelatorio = $stmtRelatorio->fetchAll();
@@ -69,8 +69,7 @@ $totalPaginas = ceil($totalRegistros / $limit);
                 <tr>
                     <th>Nome</th>
                     <th>Turma</th>
-                    <th>Motivo</th>
-                    <th>Data</th>
+                    <th>Matricula</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,19 +77,13 @@ $totalPaginas = ceil($totalRegistros / $limit);
                     foreach ($dataRelatorio as $dado) { ?>
                         <tr>
                             <td class="flex items-center gap-2">
-                                <a href="./editalunos.php?id=<?php echo $dado['id']; ?>">
+                            <a href="./editalunos.php?matricula=<?php echo $dado['matricula']; ?>">
                                     <img src="../imagems/edit.svg" alt="editar" class="w-5 h-5 hover:scale-110 transition-transform duration-200">
                                 </a>
                                 <?php echo htmlspecialchars($dado['nome']); ?>
                             </td>
                             <td><?php echo htmlspecialchars($dado['turma']); ?></td>
-                            <td><?php echo htmlspecialchars($dado['motivo']); ?></td>
-                            <td>
-                                <?php
-                                $data = explode(' ', $dado['data']);
-                                echo implode('/', array_reverse(explode('-', $data[0]))) . ' - ' . $data[1];
-                                ?>
-                            </td>
+                            <td><?php echo htmlspecialchars($dado['matricula']); ?></td>
                         </tr>
                 <?php }
                 } else { ?>
@@ -134,7 +127,7 @@ $totalPaginas = ceil($totalRegistros / $limit);
 
         <!-- Botão PDF -->
         <div class="text-center mt-8">
-            <a href="gerarpdf.php?busca_nome=<?php echo urlencode($busca_nome); ?>" target="_blank">
+            <a href="../relatorio_alunos.php?busca_nome=<?php echo urlencode($busca_nome); ?>" target="_blank">
                 <button class="bg-marista2 text-white px-6 py-2 rounded-lg drop-shadow-lg">GERAR PDF</button>
             </a>
         </div>
