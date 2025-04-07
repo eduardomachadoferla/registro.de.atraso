@@ -28,7 +28,7 @@ include("include/header.php");
     <p class="text-2xl mx-auto text-center font-black text-marista">CONSULTAR RELATÓRIO</p>
     <div class="formulario">
         <a href="gerarpdf.php" target="_blank">
-            <button class="bg-marista text-white px-6 py-2 rounded-lg drop-shadow-lg mt-6">GERAR PDF</button>
+            <button class="bg-marista2 text-white px-6 py-2 rounded-lg drop-shadow-lg mt-6">GERAR PDF</button>
         </a>
     </div>
     <div id="resultados">
