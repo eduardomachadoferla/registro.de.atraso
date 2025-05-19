@@ -2,48 +2,45 @@
 include('../../config/base.php');
 include('../../config/conexao.php');
 
-if (!isset($_SESSION)) session_start();
-
-if (!isset($_SESSION['login']['auth'])) {
-    header("Location: " . BASE_ADMIN . 'login.php');
-    exit;
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $matricula = $_POST['matricula'] ?? '';
     $nome = $_POST['nome'] ?? '';
     $turma = $_POST['turma'] ?? '';
+    $matriculaInput = $_POST['matricula'] ?? '';
 
-    $sql = "INSERT INTO alunos (matricula, nome, turma) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+    if ($nome && $turma) {
+        if (!empty($matriculaInput)) {
+            // Usa a matrícula digitada pelo usuário
+            $matricula = $matriculaInput;
+        } else {
+            // Gera matrícula automática
+            $ano = date('Y');
+            $prefixo = 'ALU' . $ano;
 
-    if ($stmt->execute([$matricula, $nome, $turma])) {
-        header("Location: alunos.php?sucesso=1");
-        exit;
+            $stmt = $pdo->prepare("SELECT matricula FROM alunos WHERE matricula LIKE :prefixo ORDER BY matricula DESC LIMIT 1");
+            $stmt->execute(['prefixo' => "$prefixo%"]);
+            $ultimo = $stmt->fetchColumn();
+
+            if ($ultimo) {
+                $numero = intval(substr($ultimo, -4)) + 1;
+            } else {
+                $numero = 1;
+            }
+
+            $matricula = $prefixo . str_pad($numero, 4, '0', STR_PAD_LEFT);
+        }
+
+        // Insere no banco
+        $stmt = $pdo->prepare("INSERT INTO alunos (matricula, nome, turma) VALUES (:matricula, :nome, :turma)");
+        $stmt->execute([
+            'matricula' => $matricula,
+            'nome' => $nome,
+            'turma' => $turma
+        ]);
+
+        header('Location: alunos.php');
+        exit();
     } else {
-        header("Location: alunos.php?erro=1");
-        exit;
+        echo "Nome e turma são obrigatórios.";
     }
 }
 ?>
-<script>
-let formAlterado = false;
-
-// Marcar quando algo for alterado
-document.querySelectorAll('input, select').forEach(element => {
-    element.addEventListener('input', () => {
-        formAlterado = true;
-    });
-});
-
-// Interceptar clique no botão "Voltar"
-const voltarBtn = document.querySelector('a[href="./alunos.php"]');
-voltarBtn.addEventListener('click', function (e) {
-    if (formAlterado) {
-        const confirmar = confirm("Você tem alterações não salvas. Deseja sair sem salvar?");
-        if (!confirmar) {
-            e.preventDefault(); // Cancela o clique
-        }
-    }
-});
-</script>

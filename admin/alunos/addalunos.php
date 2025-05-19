@@ -1,7 +1,6 @@
 <?php
 include('../../config/base.php');
 include('../../config/conexao.php');
-include('../alunos/inserir.php');
 
 if (!isset($_SESSION['login']['auth'])) {
     header("Location: " . BASE_ADMIN . 'login.php');
@@ -20,20 +19,18 @@ $aluno['turma'] = $aluno['turma'] ?? null;
 include('../include/header.php');
 ?>
 
-<!-- HTML abaixo -->
 <div class="bg-white w-3xl mx-auto p-6 rounded-lg">
     <p class="text-2xl mx-auto text-center font-black text-marista mb-6">ADICIONAR NOVO ALUNO</p>
 
     <form action="inserir.php" method="post" class="max-w-md mx-auto flex flex-col gap-4">
         <div>
-            <label for="matricula" class="block text-sm font-medium text-gray-700 mb-1">Matrícula</label>
-            <input type="text" name="matricula" id="matricula" required
-                   class="border border-gray-400 rounded-md p-3 w-full">
-        </div>
-
-        <div>
             <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
             <input type="text" name="nome" id="nome" required
+                   class="border border-gray-400 rounded-md p-3 w-full">
+        </div>
+         <div>
+            <label for="matricula" class="block text-sm font-medium text-gray-700 mb-1">matricula</label>
+            <input type="text" name="matricula" id="matricula" required
                    class="border border-gray-400 rounded-md p-3 w-full">
         </div>
 
