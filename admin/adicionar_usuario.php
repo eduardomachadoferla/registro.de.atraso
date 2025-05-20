@@ -1,14 +1,19 @@
 <?php
-include('../../config/base.php');
-include('../../config/conexao.php');
+include(__DIR__ . '/../config/base.php');
+include(__DIR__ . '/../config/conexao.php');
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['login']['auth'])) {
     header("Location: " . BASE_ADMIN . 'login.php');
     exit();
 }
 
-include('../include/header.php');
+include(__DIR__ . '/include/header.php');
 ?>
+
 
 <div class="bg-white w-3xl mx-auto p-6 rounded-lg">
     <p class="text-2xl mx-auto text-center font-black text-marista mb-6">ADICIONAR NOVO USUÁRIO</p>
@@ -50,9 +55,9 @@ include('../include/header.php');
         </div>
 
         <div class="flex justify-between mt-6">
-            <a href="./usuarios.php" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition">
+            <!-- <a href="./usuarios.php" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition">
                 Voltar
-            </a>
+            </a> -->
             <input type="submit" value="Adicionar Usuário"
                 class="bg-marista text-white px-6 py-2 rounded-lg drop-shadow-lg hover:bg-marista2 transition cursor-pointer">
         </div>

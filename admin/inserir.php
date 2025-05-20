@@ -1,15 +1,20 @@
 <?php
-include('../../config/base.php');
-include('../../config/conexao.php');
+include(__DIR__ . '/../../config/base.php');
+include(__DIR__ . '/../../config/conexao.php');
 
-// Receber dados do formulário
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $nome = $_POST['nome'] ?? '';
 $email = $_POST['email'] ?? '';
-$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+$senha = $_POST['senha'] ?? '';
 $tipo = $_POST['tipo'] ?? '';
 $permissoes = isset($_POST['permissoes']) ? implode(',', $_POST['permissoes']) : '';
 
 if ($nome && $email && $senha && $tipo) {
+    $senha_hashed = password_hash($senha, PASSWORD_DEFAULT);
+
     // Verifica se e-mail já existe
     $verifica = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE email = ?");
     $verifica->execute([$email]);
@@ -18,10 +23,10 @@ if ($nome && $email && $senha && $tipo) {
         exit();
     }
 
-    // Inserir no banco
+    // Insere novo usuário
     $sql = "INSERT INTO usuarios (nome, email, senha, tipo, permissoes) VALUES (?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nome, $email, $senha, $tipo, $permissoes]);
+    $stmt->execute([$nome, $email, $senha_hashed, $tipo, $permissoes]);
 
     header("Location: usuarios.php?msg=usuario_adicionado");
     exit();
