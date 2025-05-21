@@ -1,27 +1,35 @@
 <?php
+session_start();
 include('../config/conexao.php');
 
-$usuario = $_POST['setor'];
-$sql = 'Select * from usuarios where setor = :setor';
+$setor = $_POST['setor'];
+$senha = $_POST['senha'];
+
+// Buscar usuário pelo setor
+$sql = 'SELECT * FROM usuarios WHERE setor = :setor';
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(":setor", $usuario);
+$stmt->bindParam(":setor", $setor);
 $stmt->execute();
 $usuario = $stmt->fetchObject();
 
-if(empty($usuario)){
+if (!$usuario) {
     $_SESSION['error'] = "Usuário ou senha inválido!";
-    header("Location: ". BASE_ADMIN . 'login.php');
+    header("Location: " . BASE_ADMIN . 'login.php');
     exit;
 }
 
-if (password_verify($_POST['senha'], $usuario->senha)) {
+// Verificar senha
+if (password_verify($senha, $usuario->senha)) {
     $_SESSION['login']['auth'] = true;
     $_SESSION['login']['id'] = $usuario->id;
     $_SESSION['login']['nome'] = $usuario->setor;
     $_SESSION['login']['permissao'] = $usuario->permissao;
-    
-    header("Location: ". BASE_ADMIN . 'index.php');
-}else{
+
+    header("Location: " . BASE_ADMIN . 'index.php');
+    exit;
+} else {
     $_SESSION['error'] = "Usuário ou senha inválido!";
-    header("Location: ". BASE_ADMIN . 'login.php');
+    header("Location: " . BASE_ADMIN . 'login.php');
+    exit;
 }
+?>
