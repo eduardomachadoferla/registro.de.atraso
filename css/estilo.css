@@ -1,0 +1,124 @@
+.cont {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    /* gap: 500px; */
+    background-color: #056897;
+    height: 100px;
+}
+.titulo {
+    font-family: 'Dancing Script', cursive;
+    font-size: 36px;
+    color: #333;
+}
+
+
+.img {
+   
+transform: translateY(-5px);
+}
+.principal{
+    height: 100px;
+}
+
+.texto {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.cont2 {
+    display: flex;
+    justify-content: center;
+    gap: 500px;
+    background-color: #056897;
+    color: black;
+    text-align: center;
+    font-size: 25px;
+}
+
+.under {
+    text-decoration: underline;
+}
+
+.cont2 {
+    display: flex;
+    gap: 500px;
+    background-color: #056897;
+}
+
+@media print {
+    #btnimprimir {
+        display: block;
+        visibility: hidden;
+    }
+    .naoimprimir{
+        display: block;
+        visibility: hidden;
+    }
+     .print{
+        margin-top: -70% !important;
+        padding-top: -70% !important; 
+    } 
+}
+
+.formulario {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: start;
+    position: absolute;
+}
+
+.data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* css para a parte do select */
+.multiselect {
+    width: 200px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+    background-color: #dadada;
+}
+
+#checkboxes label {
+    display: block;
+}
+
+#checkboxes label:hover {
+    background-color: white;
+}
+/* final css para a parte do select */
+
+.error{
+    width: 210px;
+    margin: 0 auto;
+    background-color: rgba(255, 0, 0, 0.1);
+    color: red;
+    border: 1px solid red;
+    padding: 10px ;
+    border-radius: 10px;
+}
