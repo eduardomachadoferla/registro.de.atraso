@@ -5,6 +5,10 @@ include(__DIR__ . '/../config/conexao.php'); // cria $pdo
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+if (!isset($_SESSION['login']['auth']) || $_SESSION['login']['permissao'] !== 'admin') {
+    header("Location: " . BASE_ADMIN . 'dashboard.php');
+    exit();
+}
 
 if (!isset($_SESSION['login']['auth'])) {
     header("Location: " . BASE_ADMIN . 'login.php');
