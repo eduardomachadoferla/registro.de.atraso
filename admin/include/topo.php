@@ -10,7 +10,7 @@
       <?php if(in_array($_SESSION['login']['permissao'], ['admin'])){ ?>
       <li><a href="<?php echo BASE_ADMIN;?>alunos/alunos.php" class="bg-marista2 text-white px-6 py-2 rounded-lg drop-shadow-lg mt-6">Alunos</a></li>
       <?php } ?>
-        <li><a href="<?php echo BASE_ADMIN;?>../admin/adicionar_usuario.php" class="bg-marista2 text-white px-2 py-2 rounded-lg drop-shadow-lg mt-6">Adicionar usuarios</a></li>
+        <li><a href="<?php echo BASE_ADMIN;?>../admin/usuarios/adicionar_usuario.php" class="bg-marista2 text-white px-2 py-2 rounded-lg drop-shadow-lg mt-6">Adicionar usuarios</a></li>
       <?php ?>
       <li><a href="<?php echo BASE_ADMIN;?>logoff.php" class="bg-marista2 text-white px-6 py-2 rounded-lg drop-shadow-lg mt-6">logoff</a></li>
     </ul>
