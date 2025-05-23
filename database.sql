@@ -551,6 +551,10 @@ CREATE TABLE usuarios (
     senha VARCHAR(255) NOT NULL,
     permissao VARCHAR(50) NOT NULL
 );
+ALTER TABLE usuarios MODIFY permissao VARCHAR(255) NOT NULL;
+ALTER TABLE usuarios ADD nome VARCHAR(100) NOT NULL AFTER id;
+ALTER TABLE usuarios ADD email VARCHAR(100) NOT NULL AFTER nome;
+
 
 
 --
