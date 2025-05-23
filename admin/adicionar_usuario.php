@@ -10,6 +10,7 @@ if (!isset($_SESSION['login']['auth']) || $_SESSION['login']['permissao'] !== 'a
     exit();
 }
 
+
 if (!isset($_SESSION['login']['auth'])) {
     header("Location: " . BASE_ADMIN . 'login.php');
     exit();
