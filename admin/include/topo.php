@@ -26,7 +26,7 @@
             </li>
             <li>
                 <a href="<?php echo BASE_ADMIN; ?>adicionar_usuario.php" class="bg-marista2 text-white px-2 py-2 rounded-lg drop-shadow-lg mt-6">
-                    Adicionar usuários
+                    usuários
                 </a>
             </li>
         <?php endif; ?>
