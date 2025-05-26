@@ -545,11 +545,16 @@ INSERT INTO `turmas` (`id`, `turma`) VALUES
 -- Estrutura para tabela `usuarios`
 --
 
-CREATE TABLE `usuarios` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `setor` varchar(120) NOT NULL,
-  `senha` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    setor VARCHAR(50) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    permissao VARCHAR(255) NOT NULL
+);
+
+
 
 --
 -- Despejando dados para a tabela `usuarios`

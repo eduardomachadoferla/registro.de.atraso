@@ -3,7 +3,6 @@ session_start();
 
 include('../../config/conexao.php');
 include('../../config/base.php');
-include('../alunos/inserir.php');
 
 
 if (!isset($_SESSION['login']['auth'])) {

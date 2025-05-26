@@ -1,32 +1,42 @@
 <?php
 include(__DIR__ . '/../config/base.php');
-include(__DIR__ . '/../config/conexao.php');
+include(__DIR__ . '/../config/conexao.php'); // cria $pdo
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = trim($_POST['nome']);
+    $email = trim($_POST['email']);
+    $senha = $_POST['senha'];
+    $tipo = $_POST['tipo'];
+    $permissoes = isset($_POST['permissoes']) ? $_POST['permissoes'] : [];
 
-$setor = $_POST['setor'] ?? '';
-$senha = $_POST['senha'] ?? '';
-
-if ($setor && $senha) {
-    $senha_hashed = password_hash($senha, PASSWORD_DEFAULT);
-
-    // Verifica se setor já existe
-    $verifica = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE setor = ?");
-    $verifica->execute([$setor]);
-    if ($verifica->fetchColumn() > 0) {
-        echo "Erro: Setor já cadastrado!";
-        exit();
+    if (empty($nome) || empty($email) || empty($senha) || empty($tipo)) {
+        die("Preencha todos os campos obrigatórios.");
     }
 
-    // Insere novo usuário
-    $sql = "INSERT INTO usuarios (setor, senha) VALUES (?, ?)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$setor, $senha_hashed]);
+    // Hashear a senha
+    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-    header("Location: usuarios.php?msg=usuario_adicionado");
-    exit();
+    // Converter array de permissões em string
+    $permissaoStr = implode(',', $permissoes);
+
+    // Inserir no banco
+    $sql = "INSERT INTO usuarios (nome, email, setor, senha, permissao) VALUES (:nome, :email, :setor, :senha, :permissao)";
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':setor', $tipo);
+    $stmt->bindParam(':senha', $senhaHash);
+    $stmt->bindParam(':permissao', $permissaoStr);
+
+    if ($stmt->execute()) {
+        header('Location: usuarios.php?msg=Usuário criado com sucesso');
+        exit();
+    } else {
+        echo "Erro ao cadastrar usuário.";
+    }
 } else {
-    echo "Preencha todos os campos obrigatórios.";
+    // Se acessar via GET ou outro método, redireciona pro formulário
+    header('Location: usuarios.php');
+    exit();
 }
